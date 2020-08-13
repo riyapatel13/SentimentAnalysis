@@ -85,7 +85,7 @@ clf = svm.SVC(gamma=0.1, C=300)
 #takes 40 min
 clf.fit(X_train_tf,Y_train)
 predicted = clf.predict(X_test)
-svm_res = open("driving_results_svm.tsv", "w")
+svm_res = open("sentiment_analysis_results/driving_results_svm.tsv", "w")
 for doc, category in zip(X_test, predicted):
     svm_res.write('%r => %s\n' % (doc, predicted[category]))
 svm_res.close()
@@ -104,7 +104,7 @@ text_classifier.fit(X_train_counts, Y_train)
 test_vec = count_vect.transform(X_test)
 predicted = text_classifier.predict(test_vec)
 print("test",predicted)
-count_res = open("driving_results_randomforest.tsv", "w")
+count_res = open("sentiment_analysis_results/driving_results_randomforest.tsv", "w")
 for doc, category in zip(X_test, predicted):
     count_res.write('%r => %s\n' % (doc, predicted[category]))
 count_res.close()
@@ -135,7 +135,7 @@ predicted = clf.predict(test_tfidf)
 
 '''
 # submission file
-new_file = open("driving_results_NB.tsv", "w")
+new_file = open("sentiment_analysis_results/driving_results_NB.tsv", "w")
 
 for doc, category in zip(X_test, predicted):
     new_file.write('%r => %s\n' % (doc, predicted[category])) #was Y_train
