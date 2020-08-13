@@ -196,7 +196,7 @@ def writeFile(path, contents):
         f.write(contents)
 
 def predict_file(infile, outfile):
-    export_learner = load_learner('./', file = 'transformer.pkl')
+    export_learner = load_learner('./exported_models/', file = 'transformer.pkl')
     categories = {0:'Negative', 1:'Somewhat negative', 2:'Neutral', 3:'Somewhat positive', 4:'Postive'}
 
     intext = readFile(infile)
@@ -217,7 +217,7 @@ def predict_file(infile, outfile):
 
 if __name__ == "__main__":
 
-    argparser = argparse.ArgumentParser(description = "Sentiment Analysis Inference - Given an input file where each sentence is separated by a new line, it will classify each sentence as either Negative, Somewhat Negative, Neutral, Somewhat Positive, or Positive. It will then save the predictions in a new file. The learner is trained on Rotten Tomatoes movie reviews. In order to train the learner with a different dataset, please refer to the file \"fastai_sentiment_analysis.py\".")
+    argparser = argparse.ArgumentParser(description = "Sentiment Analysis Inference - Given an input file where each sentence is separated by a new line, it will classify each sentence as either Negative, Somewhat Negative, Neutral, Somewhat Positive, or Positive. It will then save the predictions in a new file. The learner is trained on Rotten Tomatoes movie reviews. In order to train the learner with a different dataset, please refer to the file \"fastai_training.py\".")
     argparser.add_argument("input_file",
                         type=str,
                         help="file containing sentences to be analyzed (line-separated)")
