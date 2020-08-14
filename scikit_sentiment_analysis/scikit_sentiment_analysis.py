@@ -78,9 +78,8 @@ def vectorize_sentences(X_train):
     return count_vect, X_train_counts
 
 # SVM Classifier
-def run_svm():
-    X_train, Y_train = import_training_data(training_data_path)
-    X_test = import_test_data(test_data_path)
+def run_svm(X_train, Y_train, X_test):
+    
     count_vect, X_train_counts = vectorize_sentences(X_train)
 
     # downscale weights for words that occur in many documents in the corpus and are therefore less informative
@@ -94,17 +93,11 @@ def run_svm():
 
     # prediction
     predicted = clf.predict(X_test)
-
-    # writing to file - return X_test, predicted. Take in file name
-    svm_res = open("sentiment_analysis_results/driving_results_svm.tsv", "w")
-    for doc, category in zip(X_test, predicted):
-        svm_res.write('%r => %s\n' % (doc, predicted[category]))
-    svm_res.close()
+    return predicted
 
 # Multinomial Naive Bayes Classifier
-def run_nb():
-    X_train, Y_train = import_training_data(training_data_path)
-    X_test = import_test_data(test_data_path)
+def run_nb(X_train, Y_train, X_test):
+   
     count_vect, X_train_counts = vectorize_sentences(X_train)
     
     # downscale weights for words that occur in many documents in the corpus and are therefore less informative
@@ -119,18 +112,11 @@ def run_nb():
 
     # prediction
     predicted = clf.predict(test_tfidf)
-
-    
-    # submission file
-    new_file = open("sentiment_analysis_results/driving_results_NB.tsv", "w")
-    for doc, category in zip(X_test, predicted):
-        new_file.write('%r => %s\n' % (doc, predicted[category])) #was Y_train
-    new_file.close()
+    return predicted
     
 # Random Forest Classifier
-def run_rand_forest():
-    X_train, Y_train = import_training_data(training_data_path)
-    X_test = import_test_data(test_data_path)
+def run_rand_forest(X_train, Y_train, X_test):
+   
     count_vect, X_train_counts = vectorize_sentences(X_train)
 
     # changing the number of estimators will also vary the results
@@ -140,14 +126,23 @@ def run_rand_forest():
 
     # prediction
     predicted = text_classifier.predict(test_vec)
+    return predicted
 
-    # writing to file - return X_test, predicted. Take in file name
-    print("test",predicted)
-    count_res = open("sentiment_analysis_results/driving_results_randomforest.tsv", "w")
+'''
+Writes results in file_name with format: sentence => prediction number   
+Prediction numbers: 
+0 => Negative
+1 => Somewhat Negative
+2 => Neutral
+3 => Somewhat Positive
+4 => Positive
+'''
+def record_results(X_test, predicted, file_name):
+    res = open(file_name, "w")
     for doc, category in zip(X_test, predicted):
-        count_res.write('%r => %s\n' % (doc, predicted[category]))
-    count_res.close()
-    
+        res.write('%r => %s\n' % (doc, predicted[category]))
+    res.close()
+
 
 if __name__ == "__main__":
     argparser = argparse.ArgumentParser(description = "Scikit Sentiment Analysis - Given an input file and the algorithm type, this file will predict the sentiment of the sentences in the input file by training the data and using the algorithm given. The data it trains on is the train.tsv (data from Rotten Tomato movie reviews). It will classify each output on a scale of 0 to 4, where 0 => Negative, 1 => Somewhat Negative, 2 => Neutral, 3 => Somewhat Positive, and 4 => Positive. The results will be saved in the output file name provided.")
@@ -163,11 +158,21 @@ if __name__ == "__main__":
     
     args = argparser.parse_args()
 
-    if args.algorithm == 'nb':
-        pass
-    elif args.algorithm == 'svm':
-        pass
+    # import data
+    X_train, Y_train = import_training_data(training_data_path)
+    X_test = import_test_data(args.input_file)
+    Y_test = None
+
+    # choose algorithm
+    if args.algorithm == 'svm':
+        Y_test = run_svm(X_train, Y_train, X_test)
+    elif args.algorithm == 'nb':
+        Y_test = run_nb(X_train, Y_train, X_test)
     elif args.algorithm == 'rf':
-        pass
+        Y_test = run_rand_forest(X_train, Y_train, X_test)
     else:
         print("Please re-run with one of these algorithms: nb (Multi-nomial Naive Bayes), svm (Support Vector Classifier), or rf (Random Forest)")
+
+    # record results
+    record_results(X_test, Y_test, args.output_file)
+    print(f"Prediction complete. The results are saved in a file named {args.output_file}.")
