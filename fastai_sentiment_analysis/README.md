@@ -20,3 +20,19 @@ This code currently uses RoBERTa's pretrained base model and customizes its toke
 * fastai_training.py
   * File to train the model. Given training data as a tsv file, it will train and export a model with fine-tuned layers. Currently uses RoBERTa's pretrained base model, but can be changed to use any of the models above. See file for details on changing models.
 
+## Running Code
+
+To run inference using one of the models in exported_models/, run
+```bash
+  python3 fastai_inference.py <input_file> <output_file>
+```
+* ```<input_file>``` is a file with line-separated sentences to be analyzed
+* ```<output_file>``` is a file containing JSON objects of the results
+  * Each object is formatted as {"sentence": [original sentence], "sentiment": [sentiment]}
+* To use a different model, see fastai_inference.py for more details.
+
+To train on a different data set, run
+```bash
+  python3 fastai_training.py
+```
+See fastai_training.py on details for what to change. 
