@@ -156,9 +156,7 @@ class CustomTransformerModel(nn.Module):
         return logits
 
 # Loading learner used for predictions
-#export_learner = load_learner('./', file = 'transformer.pkl')
-#toc = time.perf_counter()
-#print(f"Time taken to import functions and load learner: {toc-tic:0.4f} seconds")
+#export_learner = load_learner('./exported_models/', file = 'transformer.pkl')
 
 #sentence = input('Type a sentence that you want to be analyzed for sentiment:\n')
 #tac = time.perf_counter()

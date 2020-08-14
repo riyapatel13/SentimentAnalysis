@@ -321,20 +321,4 @@ learner.fit_one_cycle(2, max_lr=slice(lr*0.95**num_groups, lr), moms=(0.8, 0.9))
 
 
 learner.export(file = 'exported_models/transformer.pkl')
-
-def get_preds_as_nparray(ds_type) -> np.ndarray:
-    """
-    the get_preds method does not yield the elements in order by default
-    we borrow the code from the RNNLearner to resort the elements into their correct order
-    """
-    preds = learner.get_preds(ds_type)[0].detach().cpu().numpy()
-    sampler = [i for i in databunch.dl(ds_type).sampler]
-    reverse_sampler = np.argsort(sampler)
-    return preds[reverse_sampler, :]
-
-'''
-test_preds = get_preds_as_nparray(DatasetType.Test)
-sample_submission = pd.read_csv('../data/sampleSubmission.csv')
-sample_submission['Sentiment'] = np.argmax(test_preds,axis=1)
-sample_submission.to_csv("predictions.csv", index=False)
-'''
+print("Training complete. Model is saved as exported_models/transformer.pkl")
