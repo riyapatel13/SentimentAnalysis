@@ -1,5 +1,6 @@
 import pandas as pd
 import spacy
+import argparse
 from sklearn import svm 
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.naive_bayes import MultinomialNB
@@ -7,15 +8,14 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfTransformer
 
 '''
-sentiment_analysis.py
+scikit_sentiment_analysis.py
 
 This file contains three different classifiers to train the data set:
     1.) Support Vector Classifier
     2.) Random Forest Classifier
     3.) Multinomial Naive Bayes
 
-These are implemented using Sci-kit Learn
-
+These are implemented using Sci-kit Learn.
 '''
 
 # Python File I/O
@@ -142,3 +142,27 @@ for doc, category in zip(X_test, predicted):
 # to do: make submission file cleaner
 new_file.close()
 '''
+
+if __name__ == "__main__":
+    argparser = argparse.ArgumentParser(description = "Scikit Sentiment Analysis - Given an input file and the algorithm type, this file will predict the sentiment of the sentences in the input file by training the data and using the algorithm given. The data it trains on is the train.tsv (data from Rotten Tomato movie reviews). It will classify each output on a scale of 0 to 4, where 0 => Negative, 1 => Somewhat Negative, 2 => Neutral, 3 => Somewhat Positive, and 4 => Positive. The results will be saved in the output file name provided.")
+    argparser.add_argument("input_file",
+                        type=str,
+                        help="file containing sentences to be analyzed (line-separated)")
+    argparser.add_argument("algorithm",
+                        type=str,
+                        help="algorithm to train data. select nb (Multi-nomial Naive Bayes), svm (Support Vector Classifier), or rf (Random Forest)")
+    argparser.add_argument("output_file",
+                        type=str,
+                        help="file sentiment analysis for each sentence")
+    
+    args = argparser.parse_args()
+
+    if args.algorithm == 'nb':
+        pass
+    elif args.algorithm == 'svm':
+        pass
+    elif args.algorithm == 'rf':
+        pass
+    else:
+        print("Please re-run with one of these algorithms: nb (Multi-nomial Naive Bayes), svm (Support Vector Classifier), or rf (Random Forest)")
+        return
