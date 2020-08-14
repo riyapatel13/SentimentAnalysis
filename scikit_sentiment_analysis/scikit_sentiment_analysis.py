@@ -54,15 +54,15 @@ will return the test data in a list (a list of sentences).
 def import_test_data(file_path = "../data/test.tsv"):
     source = open(file_path, 'r').readlines()
     # get rid of title
-    source = source[1:]
+    # source = source[1:]
 
     X_test = []
 
     for line in source:
         # puts phrase id, sentence id, sentence, assignment in list
-        line_elts = line.split('\t')[2:]
+        # line_elts = line.split('\t')[2:]
         # gets rid of newline in last element (assignment)
-        X_test.append(line_elts[0][:-1]) 
+        X_test.append(line[:-1]) 
 
     return X_test
 
@@ -145,11 +145,11 @@ def record_results(X_test, predicted, file_name):
 
 
 if __name__ == "__main__":
-    argparser = argparse.ArgumentParser(description = "Scikit Sentiment Analysis - Given an input file and the algorithm type, this file will predict the sentiment of the sentences in the input file by training the data and using the algorithm given. The data it trains on is the train.tsv (data from Rotten Tomato movie reviews). It will classify each output on a scale of 0 to 4, where 0 => Negative, 1 => Somewhat Negative, 2 => Neutral, 3 => Somewhat Positive, and 4 => Positive. The results will be saved in the output file name provided.")
+    argparser = argparse.ArgumentParser(description = "Scikit Sentiment Analysis - Given an input file and the classifier type, this file will predict the sentiment of the sentences in the input file by training the data and using the classifier type given. The data it trains on is the train.tsv (data from Rotten Tomato movie reviews). It will classify each output on a scale of 0 to 4, where 0 => Negative, 1 => Somewhat Negative, 2 => Neutral, 3 => Somewhat Positive, and 4 => Positive. The results will be saved in the output file name provided.")
     argparser.add_argument("input_file",
                         type=str,
                         help="file containing sentences to be analyzed (line-separated)")
-    argparser.add_argument("algorithm",
+    argparser.add_argument("classifier_type",
                         type=str,
                         help="algorithm to train data. select nb (Multi-nomial Naive Bayes), svm (Support Vector Classifier), or rf (Random Forest)")
     argparser.add_argument("output_file",
@@ -163,15 +163,15 @@ if __name__ == "__main__":
     X_test = import_test_data(args.input_file)
     Y_test = None
 
-    # choose algorithm
-    if args.algorithm == 'svm':
+    # choose classifier type
+    if args.classifier_type == 'svm':
         Y_test = run_svm(X_train, Y_train, X_test)
-    elif args.algorithm == 'nb':
+    elif args.classifier_type == 'nb':
         Y_test = run_nb(X_train, Y_train, X_test)
-    elif args.algorithm == 'rf':
+    elif args.classifier_type == 'rf':
         Y_test = run_rand_forest(X_train, Y_train, X_test)
     else:
-        print("Please re-run with one of these algorithms: nb (Multi-nomial Naive Bayes), svm (Support Vector Classifier), or rf (Random Forest)")
+        print("Please re-run with one of these classifier types: nb (Multi-nomial Naive Bayes), svm (Support Vector Classifier), or rf (Random Forest)")
 
     # record results
     record_results(X_test, Y_test, args.output_file)
