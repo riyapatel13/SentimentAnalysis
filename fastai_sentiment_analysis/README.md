@@ -31,8 +31,14 @@ To run inference using one of the models in exported_models/, run
   * Each object is formatted as {"sentence": [original sentence], "sentiment": [sentiment]}
 * To use a different model, see fastai_inference.py for more details.
 
+
 To train on a different data set, run
 ```bash
   python3 fastai_training.py
 ```
-See fastai_training.py on details for what to change. 
+See fastai_training.py on details for what to change. Running this file will create a models folder that contains the temporary models after gradual unfreezing of each layer and a __results_files folder containing graphs used to calculate the learning rates.
+
+If you experience permission issues running inference, run
+```bash
+  sudo python3 fastai_inference.py <input_file> <output_file>
+```
