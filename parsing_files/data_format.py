@@ -231,6 +231,7 @@ def parse_doc(path):
 
     # edit file to make it readable for parser
     # this needs some customization depending on the text format
+    
     tos = tos.replace("\n",". ")
     tos = tos.replace("(", "(")
     tos = tos.replace(")", "")
