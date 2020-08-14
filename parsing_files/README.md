@@ -15,4 +15,6 @@ This repo contains code to parse sentences and create more training data.
   ```bash
   python data_format.py <input file> <output file>
   ```
-  This will save the parsed data into ```<output file>```. Another file containing the output in a list format should also be created. For more information, run ```python data_format.py -h```.
+  * ```<input file>``` is the file containing sentences that need to be parsed (either line-separated or in paragraph form)
+  * ```<output file>``` contain the results of the parsed data
+  * Another file containing the output in a list format should also be created. For more information, run ```python data_format.py -h```.
