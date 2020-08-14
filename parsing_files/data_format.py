@@ -41,20 +41,16 @@ This data can then be fed into the sentiment analysis tool.
 '''
 
 
-
-# make sure this is in pyStatParser folder
-#parser = Parser()
-
+'''
+Uses regex to find grouping of parentheses.
+:param line: input string (string version of grammar tree)
+:param opendelim: opening character to match
+:param closedelim: closing character to match
+    https://stackoverflow.com/questions/5454322/python-how-to-match-nested-parentheses-with-regex
+:return: None
+'''
 def matches(line, opendelim='(', closedelim=')'):
-    '''
-    Uses regex to find grouping of parentheses.
-    :param line: input string (string version of grammar tree)
-    :param opendelim: opening character to match
-    :param closedelim: closing character to match
-     https://stackoverflow.com/questions/5454322/python-how-to-match-nested-parentheses-with-regex
-    :return: None
-    '''
-
+    
     stack = []
 
     for m in re.finditer(r'[{}{}]'.format(opendelim, closedelim), line):
@@ -83,12 +79,13 @@ def matches(line, opendelim='(', closedelim=')'):
             print("expecting closing quote to match open quote starting at: '{}'"
                   .format(line[pos-1:]))
 
+
+'''
+Creates stack to organize phrases (using parens) and removes POS tag.
+:param tree: grammar tree (type = 'nltk.tree.Tree')
+:return: stack of phrases
+'''
 def create_stack(tree):
-    '''
-    Creates stack to organize phrases (using parens) and removes POS tag.
-    :param tree: grammar tree (type = 'nltk.tree.Tree')
-    :return: stack of phrases
-    '''
 
     stack = []
 
@@ -109,13 +106,12 @@ def create_stack(tree):
 
     return stack
 
-
+'''
+Converts stack contents to string.
+:param stack: stack containing phrases created by create_stack
+:return: string version of stack
+'''
 def stack_to_string(stack):
-    '''
-    Converts stack contents to string.
-    :param stack: stack containing phrases created by create_stack
-    :return: string version of stack
-    '''
 
     s = str(stack)
     s = re.sub("\'","", s)
@@ -138,13 +134,13 @@ def stack_to_string(stack):
 
 def strip_space(sent):
     return re.sub(" +", " ", sent)
-            
+
+'''
+Creates a list of parsed phrases given a single sentence.
+:param sentence: sentence from the data
+:return: list of phrases
+'''  
 def create_phrase_list(sentence):
-    '''
-    Creates a list of parsed phrases given a single sentence.
-    :param sentence: sentence from the data
-    :return: list of phrases
-    '''
 
     #remove ending punctuation
     if sentence[-1] in string.punctuation:
@@ -172,6 +168,7 @@ def create_phrase_list(sentence):
 
     return phrase_list
 
+
 # Python File I/O
 def readFile(path):
     with open(path, "rt") as f:
@@ -181,14 +178,13 @@ def writeFile(path, contents):
     with open(path, "wt") as f:
         f.write(contents)
 
-
+'''
+Splits a string into sentences using regex.
+:param text: string containing the contents of the data
+https://stackoverflow.com/questions/4576077/python-split-text-on-sentences
+:return: list of sentences
+'''
 def split_into_sentences(text):
-    '''
-    Splits a string into sentences using regex.
-    :param text: string containing the contents of the data
-    https://stackoverflow.com/questions/4576077/python-split-text-on-sentences
-    :return: list of sentences
-    '''
 
     alphabets= "([A-Za-z])"
     prefixes = "(Mr|St|Mrs|Ms|Dr)[.]"
@@ -224,12 +220,12 @@ def split_into_sentences(text):
     return sentences
 
 #reads file and parses all sentences
+'''
+Parses entire document using functions above.
+:param path: file path of data
+:return: list of phrases
+'''
 def parse_doc(path):
-    '''
-    Parses entire document using functions above.
-    :param path: file path of data
-    :return: list of phrases
-    '''
 
     tos = readFile(path)
 
@@ -249,6 +245,7 @@ def parse_doc(path):
         if x != None:
             phrase_list += x
     return phrase_list
+
 
 if __name__ == "__main__":
 
@@ -280,4 +277,4 @@ if __name__ == "__main__":
     # this makes it go into separate the phrases into new lines
     tos = tos.replace("\', \'","\n") 
     writeFile(args.output_file, tos)
-    print(f"The parsed data should be located in a file named \"{args.output_file}\". To see all the data in a list, you can open the file \"{list_file}\"")
+    print(f"The parsed data should be located in a file named \"{args.output_file}\". To see all the data in a list format, you can open the file \"{list_file}\"")
