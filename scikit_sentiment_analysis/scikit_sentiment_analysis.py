@@ -67,7 +67,7 @@ for line in source:
     #X_test.append(line)
 
 
-
+'''
 #tokenization
 # builds a dictionary of features and transforms documents to feature vectors
 count_vect = CountVectorizer()
@@ -92,9 +92,9 @@ svm_res.close()
 #print(test)
 
 #test_data = []
-
-
 '''
+
+
 #RandomForestAlg
 count_vect = CountVectorizer()
 X_train_counts = count_vect.fit_transform(X_train)
@@ -108,7 +108,7 @@ count_res = open("sentiment_analysis_results/driving_results_randomforest.tsv", 
 for doc, category in zip(X_test, predicted):
     count_res.write('%r => %s\n' % (doc, predicted[category]))
 count_res.close()
-'''
+
 
 '''
 #tokenization
@@ -195,18 +195,19 @@ def vectorize_sentences(X_train):
     count_vect = CountVectorizer()
     # potentially what is causing the poor prediction because the sentences might not be vectorizing well since they are complex
     X_train_counts = count_vect.fit_transform(X_train) 
-    return X_train_counts
+    return count_vect, X_train_counts
 
-def train_svm():
+def run_svm():
     X_train, Y_train = import_training_data(training_data_path)
     X_test = import_test_data(test_data_path)
-    X_train_counts = vectorize_sentences(X_train)
+    count_vect, X_train_counts = vectorize_sentences(X_train)
 
     # downscale weights for words that occur in many documents in the corpus and are therefore less informative
     tf_transformer = TfidfTransformer(use_idf=False).fit(X_train_counts)
     X_train_tf = tf_transformer.transform(X_train_counts)
 
     # setting up classifier and fitting
+    # changing the values of C and gamma will also vary the results
     clf = svm.SVC(gamma=0.1, C=300)
     clf.fit(X_train_tf,Y_train)
 
@@ -220,17 +221,32 @@ def train_svm():
     svm_res.close()
  
 
-def train_nb():
+def run_nb():
     X_train, Y_train = import_training_data(training_data_path)
     X_test = import_test_data(test_data_path)
-    X_train_counts = vectorize_sentences(X_train)
+    count_vect, X_train_counts = vectorize_sentences(X_train)
     pass
 
-def train_rand_forest():
+def run_rand_forest():
     X_train, Y_train = import_training_data(training_data_path)
     X_test = import_test_data(test_data_path)
-    X_train_counts = vectorize_sentences(X_train)
-    pass
+    count_vect, X_train_counts = vectorize_sentences(X_train)
+
+    # changing the number of estimators will also vary the results
+    text_classifier = RandomForestClassifier(n_estimators=200, random_state=0)
+    text_classifier.fit(X_train_counts, Y_train)
+    test_vec = count_vect.transform(X_test)
+
+    # prediction
+    predicted = text_classifier.predict(test_vec)
+
+    # writing to file - return X_test, predicted. Take in file name
+    print("test",predicted)
+    count_res = open("sentiment_analysis_results/driving_results_randomforest.tsv", "w")
+    for doc, category in zip(X_test, predicted):
+        count_res.write('%r => %s\n' % (doc, predicted[category]))
+    count_res.close()
+    
 
 if __name__ == "__main__":
     argparser = argparse.ArgumentParser(description = "Scikit Sentiment Analysis - Given an input file and the algorithm type, this file will predict the sentiment of the sentences in the input file by training the data and using the algorithm given. The data it trains on is the train.tsv (data from Rotten Tomato movie reviews). It will classify each output on a scale of 0 to 4, where 0 => Negative, 1 => Somewhat Negative, 2 => Neutral, 3 => Somewhat Positive, and 4 => Positive. The results will be saved in the output file name provided.")
