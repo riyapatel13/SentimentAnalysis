@@ -21,7 +21,3 @@ To train the data using a specific classifier and view the results, run
 * ```<input file>``` is the file containing line-separated sentences that need to be analyzed
 * ```<classifier type>``` specifies which classifier will be trained - "nb" (multinomial Naive Bayes), "svm" (Support Vector Classifier), or "rf" (Random Forest)
 * ```<output file>``` contain the results of the prediction in the format ```sentence => prediction```
-
-## Conclusion
-
-Re-run with timings and write this.
