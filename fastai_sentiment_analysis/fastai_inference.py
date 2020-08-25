@@ -155,35 +155,21 @@ class CustomTransformerModel(nn.Module):
                                   attention_mask = attention_mask)[0]   
         return logits
 
+# Code for typing in your own input
+'''
 # Loading learner used for predictions
-#export_learner = load_learner('./exported_models/', file = 'transformer.pkl')
+export_learner = load_learner('./exported_models/', file = 'transformer.pkl')
 
-#sentence = input('Type a sentence that you want to be analyzed for sentiment:\n')
-#tac = time.perf_counter()
-#prediction = export_learner.predict(sentence)
+sentence = input('Type a sentence that you want to be analyzed for sentiment:\n')
+tac = time.perf_counter()
+prediction = export_learner.predict(sentence)
 
-#categories = {0:'Negative', 1:'Somewhat negative', 2:'Neutral', 3:'Somewhat positive', 4:'Postive'}
-#print(categories[int(prediction[0])])
-#tuc = time.perf_counter()
-#print(f"Time taken to predict and print: {tuc-tac:0.4f} seconds")
-
-# Predictions
+categories = {0:'Negative', 1:'Somewhat negative', 2:'Neutral', 3:'Somewhat positive', 4:'Postive'}
+print(categories[int(prediction[0])])
+tuc = time.perf_counter()
+print(f"Time taken to predict and print: {tuc-tac:0.4f} seconds")
 '''
-def get_preds_as_nparray(ds_type) -> np.ndarray:
-    """
-    the get_preds method does not yield the elements in order by default
-    we borrow the code from the RNNLearner to resort the elements into their correct order
-    """
-    preds = export_learner.get_preds(ds_type)[0].detach().cpu().numpy()
-    sampler = [i for i in databunch.dl(ds_type).sampler]
-    reverse_sampler = np.argsort(sampler)
-    return preds[reverse_sampler, :]
 
-test_preds = get_preds_as_nparray(DatasetType.Test)
-sample_submission = pd.read_csv('sampleSubmission.csv')
-sample_submission['Sentiment'] = np.argmax(test_preds,axis=1)
-sample_submission.to_csv("car_preds.csv", index=False)
-'''
 # Python File I/O
 def readFile(path):
     with open(path, "rt") as f:
