@@ -37,12 +37,16 @@ https://cloud.ibm.com/apidocs/tone-analyzer?_ga=2.86587288.1693115604.1593467976
 Currently 2 versions: 2017-09-21, 2016-05-19
 The service URL can be found with the API key. 
 '''
-def init_analyzer():
-    authenticator = IAMAuthenticator('ariKWpUe_6Mx5YAQRtAzJ6VV7Bu6qAeKzlVlZSKC9Y0_')
+# WRITE YOUR API KEY AND SERVICE URL HERE 
+api_string = 'ariKWpUe_6Mx5YAQRtAzJ6VV7Bu6qAeKzlVlZSKC9Y0_'
+service_url_string = 'https://api.us-east.tone-analyzer.watson.cloud.ibm.com/instances/7a24ce0a-afd9-49c3-980e-fe89b178474d'
+
+def init_analyzer(api_string, service_url_string):
+    authenticator = IAMAuthenticator(api_string)
     analyzer = ToneAnalyzerV3(
         version='2016-05-19',
         authenticator=authenticator)
-    analyzer.set_service_url('https://api.us-east.tone-analyzer.watson.cloud.ibm.com/instances/7a24ce0a-afd9-49c3-980e-fe89b178474d')
+    analyzer.set_service_url(service_url_string)
     
     return analyzer
 
@@ -93,7 +97,7 @@ if __name__ == "__main__":
                             help="File containing tone analysis of text.")
     args = argparser.parse_args()
 
-    service = init_analyzer()
+    service = init_analyzer(api_string, service_url_string)
     analyze(service, args.input_file_path, args.output_file_path)
 
     print(f"The tone analysis should be located in a file named \"{args.output_file_path}\".")
