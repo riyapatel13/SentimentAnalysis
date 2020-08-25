@@ -8,13 +8,9 @@ from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 import argparse
 
 '''
-TODO:
-- documentation
-- accept JSON file or text file as inputs
-- fix new line issue
-
 ibm_sentiment.py
 
+See this link for modifying for different input versions.
 https://github.com/watson-developer-cloud/python-sdk/blob/master/examples/tone_analyzer_v3.py
 
 - Tones:
@@ -38,9 +34,10 @@ Currently 2 versions: 2017-09-21, 2016-05-19
 The service URL can be found with the API key. 
 '''
 # WRITE YOUR API KEY AND SERVICE URL HERE 
-api_string = 'ariKWpUe_6Mx5YAQRtAzJ6VV7Bu6qAeKzlVlZSKC9Y0_'
-service_url_string = 'https://api.us-east.tone-analyzer.watson.cloud.ibm.com/instances/7a24ce0a-afd9-49c3-980e-fe89b178474d'
+api_string = 'WRITE_API_KEY_HERE'
+service_url_string = 'WRITE_SERVICE_URL_HERE'
 
+# initializes analyzer using api key and service url
 def init_analyzer(api_string, service_url_string):
     authenticator = IAMAuthenticator(api_string)
     analyzer = ToneAnalyzerV3(
@@ -50,15 +47,8 @@ def init_analyzer(api_string, service_url_string):
     
     return analyzer
 
-'''
-Use service.tone to analyze the tone of the input and json.dumps to format as json. 
-tone_input: input text
-content_type: [application/json, text/plain, text/html]
-'''
 
-'''
-This code segment will take the command-line input and analyze the tone of the sentences typed.
-'''
+# This code segment will take the command-line input and analyze the tone of the sentences typed.
 '''
 sent = input('Hello, please provide a sentence for analysis.\n') 
 
