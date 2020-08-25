@@ -19,6 +19,9 @@ This code currently uses RoBERTa's pretrained base model and customizes its toke
   * File to conduct inference. Given a text file with line-separated sentences, this file will predict each sentence's sentiment on a scale from Negative to Positive (Negative, Somewhat negative, Neutral, Somewhat positive, and Positive). The results will be stored in a file passed in by the user. Currently uses ```exported_models/transformer.pkl``` as its model, but can be modified.
 * fastai_training.py
   * File to train the model. Given training data as a tsv file, it will train and export a model with fine-tuned layers. Currently uses RoBERTa's pretrained base model, but can be changed to use any of the models above. See file for details on changing models.
+* fastai_results
+  * Results of running fastai_inference.py on text files.
+  * Currently contains results after performing inference on driving.txt (in data).
 
 ## Running Code
 
